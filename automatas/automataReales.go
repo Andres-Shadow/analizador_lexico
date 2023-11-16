@@ -12,17 +12,11 @@ const (
 	EstadoError
 )
 
-type Automata struct {
+type AutomataNumeroReal struct {
 	estadoActual EstadoReales
 }
 
-func NuevoAutomata() *Automata {
-	return &Automata{
-		estadoActual: EstadoInicial,
-	}
-}
-
-func (a *Automata) ProcesarSimbolo(simbolo rune) {
+func (a *AutomataNumeroReal) ProcesarSimbolo(simbolo rune) {
 	switch a.estadoActual {
 	case EstadoInicial:
 		if simbolo == 'r' {
@@ -69,7 +63,7 @@ func esDigito(simbolo rune) bool {
 
 func EvaluarReales(cadena string) bool {
 
-	automata := NuevoAutomata()
+	automata := &AutomataNumeroReal{}
 
 	for _, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)

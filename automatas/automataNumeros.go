@@ -14,12 +14,6 @@ type AutomataNatural struct {
 	estadoActual EstadoNatural
 }
 
-func NuevoAutomataNatural() *AutomataNatural {
-	return &AutomataNatural{
-		estadoActual: EstadoInicialNatural,
-	}
-}
-
 func (a *AutomataNatural) ProcesarSimbolo(simbolo rune) {
 	switch a.estadoActual {
 	case EstadoInicialNatural:
@@ -46,7 +40,7 @@ func esDigitoNatural(simbolo rune) bool {
 }
 
 func EvaluarAutomata(cadena string) bool {
-	automata := NuevoAutomataNatural()
+	automata := &AutomataNatural{}
 
 	for _, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)

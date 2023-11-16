@@ -1,8 +1,13 @@
 package main
 
-func main() {
-	//verificar := "r23,67r"
-	//a := automatas.EvaluarAutomata(verificar)
-	//a := automatas.EvaluarReales(verificar)
+import (
+	"fmt"
+	"proyecto_tlf/automatas"
+)
 
+func main() {
+	verificar := "$a$"
+	//a := automatas.EvaluarAutomata(verificar)
+	a := automatas.EvaluarCadena(verificar)
+	fmt.Print(a)
 }
