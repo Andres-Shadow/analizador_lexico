@@ -10,14 +10,18 @@ func main() {
 	var texto string
 	var result bool
 	//texto = "n22n;r22,0r;mQ;pr;&"
-	texto = "msms;mnmn;prpr;dvdv"
-	segmentacion := strings.Split(texto, ";")
+	//texto = "msms;mnmn;prpr;dvdv"
+	texto = ";-\n"
+	segmentacion := strings.Split(texto, "-")
 
 	for i := 0; i < len(segmentacion); i++ {
 		cadena := segmentacion[i]
 		fmt.Println("----------------------------")
 		fmt.Println("evaluando la palabra: ", cadena)
 
+		result = automatas.EvaluarTerminal(cadena)
+		fmt.Println(result)
+		/*
 		result = automatas.EvaluarIncremento(cadena)
 		fmt.Println(result)
 		/*result = automatas.EvaluarAutomata(cadena)
