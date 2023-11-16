@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	verificar := "$a$"
+	verificar := "pr"
 	//a := automatas.EvaluarAutomata(verificar)
-	a := automatas.EvaluarCadena(verificar)
+	a := automatas.EvaluarAutomataMultiplicacion(verificar)
 	fmt.Print(a)
 }
