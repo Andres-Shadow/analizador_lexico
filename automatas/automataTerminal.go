@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 type EstadoTermial int
 
@@ -28,15 +29,25 @@ func (a *AutomataTerminal) procesarTerminal(simbolo rune) {
 	}
 }
 
-func EvaluarTerminal(cadena string) bool {
+func EvaluarTerminal(cadena string) (bool, int) {
 	automata := &AutomataTerminal{}
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarTerminal(simbolo)
+
+		if automata.estadoActual == EstadoFinalTermianl {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorTerminal {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalTermianl {
-		return true
+		fmt.Println("es un final de sentencia", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
+

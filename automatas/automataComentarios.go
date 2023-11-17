@@ -33,7 +33,7 @@ func (a *AutomataComentario) procesarComentario(simbolo rune) {
 			a.estadoActual = EstadoErrorComentario
 		}
 	case EstadoInicioComLinea:
-		terminal := EvaluarTerminal(string(simbolo))
+		terminal,_ := EvaluarTerminal(string(simbolo))
 		if terminal == true {
 			a.estadoActual = EstadoFinalComentario
 		} else {
