@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 type EstadoReales int
 
@@ -61,17 +62,24 @@ func esDigito(simbolo rune) bool {
 	return simbolo >= '0' && simbolo <= '9'
 }
 
-func EvaluarReales(cadena string) bool {
-
+func EvaluarReales(cadena string) (bool, int) {
 	automata := &AutomataNumeroReal{}
-
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
+
+		if automata.estadoActual == EstadoFinal {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoError {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinal {
-		return true
+		fmt.Println("es un numero real", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
