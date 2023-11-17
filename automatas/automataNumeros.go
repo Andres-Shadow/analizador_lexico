@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 // Definición del tipo de estado
 type EstadoNatural int
@@ -39,16 +40,24 @@ func esDigitoNatural(simbolo rune) bool {
 	return simbolo >= '0' && simbolo <= '9'
 }
 
-func EvaluarAutomata(cadena string) bool {
+func EvaluarNatural(cadena string) (bool, int) {
 	automata := &AutomataNatural{}
-
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
+
+		if automata.estadoActual == EstadoFinalNatural {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorNatural {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalNatural {
-		return true
+		fmt.Println("es un numero natural", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
