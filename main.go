@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	texto := "$nombre mi socio$ .= ms"
+	texto := "$nombre mi socio$ .=       ms pr pr pr   aaaa"
 	var txtOriginal string
 	var recorrido int
 	txtOriginal = texto
@@ -15,10 +15,10 @@ func main() {
 
 	texto = strings.TrimSpace(texto)
 	for i := 0; i < 100; i++ {
-		fmt.Println("evaluando: -", texto, "-")
+		//fmt.Println("evaluando: -", texto, "-")
 		tamCadena := esCadena(texto)
 		if tamCadena != len(texto) {
-			recorrido = tamCadena
+			recorrido += tamCadena
 			texto = txtOriginal[tamCadena:fin]
 		} else {
 			tamIgualacion := esIgualacion(texto)
