@@ -30,7 +30,7 @@ func (a *AutomataS) ProcesarSimbolo(simbolo rune) {
 		if simbolo == '$' {
 			a.estadoActual = EstadoIntermedioS
 			a.contador = 1
-		}else{
+		} else {
 			a.estadoActual = EstadoErrorS
 		}
 	case EstadoIntermedioS:
@@ -45,9 +45,9 @@ func (a *AutomataS) ProcesarSimbolo(simbolo rune) {
 			a.estadoActual = EstadoPreFinalS
 		}
 	case EstadoPreFinalS:
-		if simbolo == '$'{
+		if simbolo == '$' {
 			a.estadoActual = EstadoFinalS
-		}else{
+		} else {
 			a.estadoActual = EstadoErrorS
 		}
 	case EstadoFinalS:
@@ -57,7 +57,7 @@ func (a *AutomataS) ProcesarSimbolo(simbolo rune) {
 
 func esCaracterValido(simbolo rune) bool {
 	// Puedes ajustar la lógica según tus necesidades
-	return (simbolo >= 'a' && simbolo <= 'z') || (simbolo >= 'A' && simbolo <= 'Z')
+	return (simbolo >= 'a' && simbolo <= 'z') || (simbolo >= 'A' && simbolo <= 'Z') || simbolo == ' '
 }
 
 func EvaluarAutomataS(cadena string) bool {

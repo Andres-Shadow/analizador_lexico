@@ -3,38 +3,32 @@ package main
 import (
 	"fmt"
 	"proyecto_tlf/automatas"
-	"strings"
 )
 
 func main() {
-	var texto string
-	var result bool
-	//texto = "n22n;r22,0r;mQ;pr;&"
-	//texto = "msms;mnmn;prpr;dvdv"
-	texto = "#aaa\n-/#perro#/"
-	segmentacion := strings.Split(texto, "-")
+	texto := "$nombre mi socio$ .= "
+	var txtOriginal string
+	var recorrido int
+	txtOriginal = texto
 
-	for i := 0; i < len(segmentacion); i++ {
-		cadena := segmentacion[i]
-		fmt.Println("----------------------------")
-		fmt.Println("evaluando la palabra: ", cadena)
+	continuar := true
 
-		result = automatas.EvaluarComentario(cadena)
-		fmt.Println(result)
-		/*
-			result = automatas.EvaluarIncremento(cadena)
-			fmt.Println(result)
-			/*result = automatas.EvaluarAutomata(cadena)
-			fmt.Println("natural: ", result)
-			result = automatas.EvaluarReales(cadena)
-			fmt.Println("real: ", result)
-			result = automatas.EvaluarComparacion(cadena)
-			fmt.Println("comparacion: ", result)
-			result = automatas.EvaluarAritmetico(cadena)
-			fmt.Println("aritmetico: ", result)
-			result = automatas.EvaluarLogico(cadena)
-			fmt.Println("logico: ", result)*/
+	for continuar {
+		fmt.Println("evaluando: ", texto)
+		valido, tam, restante := automatas.EvaluarCadena(texto)
+		if valido == true {
+			fmt.Println("es una cadena: ", texto[:tam])
+			recorrido = tam
+			texto = restante
+		} else {
+			fmt.Println("no es una cadena: ", texto[:tam])
+			recorrido ++
+			texto = txtOriginal[recorrido:]
+			
+		}
 
+		if recorrido == len(txtOriginal) {
+			continuar = false
+		}
 	}
-	//a := automatas.EvaluarAutomata(verificar)
 }

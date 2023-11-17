@@ -1,2 +1,1 @@
-n56n
-natural_true
+n56n natural_true

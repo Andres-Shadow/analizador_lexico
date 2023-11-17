@@ -34,16 +34,25 @@ func (a *AutomataCadena) procesarPalabra(simbolo rune) {
 	}
 }
 
-func EvaluarCadena(cadena string) bool {
+func EvaluarCadena(cadena string) (bool, int, string) {
 	automata := &AutomataCadena{}
+	var iterator int
 
-	for _, simbolo := range cadena {
+	for i, simbolo := range cadena {
 		automata.procesarPalabra(simbolo)
+
+		// Agregar tu condición de parada aquí
+		if automata.estadoActual == EstadoFinalCadena {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorCadena {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalCadena {
-		return true
+		return true, iterator, cadena[iterator:]
 	} else {
-		return false
+		return false, len(cadena), cadena
 	}
 }
