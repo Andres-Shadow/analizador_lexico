@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 // Definición del tipo de estado
 type EstadoS int
@@ -60,15 +61,24 @@ func esCaracterValido(simbolo rune) bool {
 	return (simbolo >= 'a' && simbolo <= 'z') || (simbolo >= 'A' && simbolo <= 'Z') || simbolo == ' '
 }
 
-func EvaluarAutomataS(cadena string) bool {
+func EvaluarIdentificador(cadena string) (bool, int) {
 	automata := &AutomataS{}
-
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
+
+		if automata.estadoActual == EstadoFinalS {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorS {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalS {
-		return true
+		fmt.Println("es un Identificador", cadena[:iterator])
+		return true, iterator
+	} else {
+		return false, len(cadena)
 	}
-	return false
 }
