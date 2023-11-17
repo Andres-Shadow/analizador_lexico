@@ -1,5 +1,7 @@
 package automatas
 
+import "fmt"
+
 type EstadoCadena int
 
 const (
@@ -51,6 +53,7 @@ func EvaluarCadena(cadena string) (bool, int, string) {
 	}
 
 	if automata.estadoActual == EstadoFinalCadena {
+		fmt.Println("es un cadena: ", cadena[:iterator])
 		return true, iterator, cadena[iterator:]
 	} else {
 		return false, len(cadena), cadena

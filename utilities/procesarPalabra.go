@@ -34,10 +34,10 @@ func VerificarPalabraIngresada(palabra string) string {
 		return result
 	}
 
-	if automatas.EvaluarAritmetico(palabra) {
+	/*if automatas.EvaluarAritmetico(palabra) {
 		result = "aritmetico"
 		return result
-	}
+	}*/
 
 	if automatas.EvaluarLogico(palabra) {
 		result = "logico"

@@ -1,5 +1,7 @@
 package automatas
 
+import "fmt"
+
 type EstadoAritmetico int
 
 const (
@@ -60,15 +62,24 @@ func (a *AutomataArimetico) procesarArimetico(simbolo rune) {
 	}
 }
 
-func EvaluarAritmetico(cadena string) bool {
+func EvaluarAritmetico(cadena string) (bool, int) {
 	automata := &AutomataArimetico{}
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarArimetico(simbolo)
+
+		if automata.estadoActual == EstadoFInalAritmetico {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorAritmetico {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFInalAritmetico {
-		return true
+		fmt.Println("es un operador aritmetico", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }

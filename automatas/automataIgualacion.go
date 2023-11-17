@@ -1,5 +1,7 @@
 package automatas
 
+import "fmt"
+
 type EstadoIgualacion int
 
 const (
@@ -47,6 +49,7 @@ func EvaluarIgualacion(cadena string) (bool, int, string) {
 	}
 
 	if automata.estadoActual == EstadoFinalIgualacion {
+		fmt.Println("es un igualacion: ", cadena[:iterator])
 		return true, iterator, cadena[iterator:]
 	} else {
 		return false, len(cadena), cadena
