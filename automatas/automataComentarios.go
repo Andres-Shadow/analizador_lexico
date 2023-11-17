@@ -1,5 +1,5 @@
 package automatas
-
+import "fmt"
 type EstadoComentario int
 
 const (
@@ -65,15 +65,24 @@ func (a *AutomataComentario) procesarComentario(simbolo rune) {
 
 }
 
-func EvaluarComentario(cadena string) bool {
+func EvaluarComentario(cadena string) (bool, int) {
 	automata := &AutomataComentario{}
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarComentario(simbolo)
+
+		if automata.estadoActual == EstadoFinalComentario {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorComentario {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalComentario {
-		return true
+		fmt.Println("es un comentario", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
