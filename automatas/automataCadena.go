@@ -18,7 +18,7 @@ type AutomataCadena struct {
 func (a *AutomataCadena) procesarPalabra(simbolo rune) {
 	switch a.estadoActual {
 	case EstadoInicialCadena:
-		if simbolo == '$' {
+		if simbolo == '?' {
 			a.estadoActual = EstadoIntermedioCadena
 		} else {
 			a.estadoActual = EstadoErrorCadena
@@ -26,7 +26,7 @@ func (a *AutomataCadena) procesarPalabra(simbolo rune) {
 	case EstadoIntermedioCadena:
 		if esCaracterValido(simbolo) {
 			//sigue en el mismo estado
-		} else if simbolo == '$' {
+		} else if simbolo == '?' {
 			a.estadoActual = EstadoFinalCadena
 		} else {
 			a.estadoActual = EstadoErrorCadena
