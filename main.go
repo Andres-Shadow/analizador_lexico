@@ -6,22 +6,25 @@ import (
 )
 
 func main() {
-	texto := "$nombre mi socio$ .=       ms pr pr pr   aaaa"
+	texto := "?nombre mi socio? .=       ms pr pr pr   aaaa &"
 	var txtOriginal string
 	var recorrido int
 	recorrido = 0
 	txtOriginal = texto
 	fin := len(txtOriginal)
 
-	for i := 0; recorrido <= fin; i++ {
+	for i := 0; recorrido < fin; i++ {
+		//for i := 0; i < 1; i++ {
 
-		fmt.Println("----------------------------------------------------------------------------------")
-		fmt.Println("iteracion: ", i, " | palabra restante: -", texto, "- | recorrido va en: ", recorrido)
-		fmt.Println("----------------------------------------------------------------------------------")
-
-		if recorrido <= len(txtOriginal) {
-			posicion := esCadena(texto)
+		if recorrido < fin {
 			texto = txtOriginal[recorrido:fin]
+
+			/*fmt.Println("----------------------------------------------------------------------------------")
+			fmt.Println("iteracion: ", i, " | palabra restante: -", texto, "- | recorrido va en: ", recorrido)
+			fmt.Println("----------------------------------------------------------------------------------")*/
+
+			posicion := esCadena(texto)
+
 			if posicion != -1 {
 				recorrido += posicion
 			} else {
@@ -33,12 +36,31 @@ func main() {
 					if posicion != -1 {
 						recorrido += posicion
 					} else {
-						recorrido++
-						fmt.Println("es un error: ", texto)
+						posicion = esLogico(texto)
+						if posicion != -1 {
+							recorrido += posicion
+						} else {
+
+							if txtOriginal[recorrido] == ' ' {
+								recorrido++
+							} else {
+								recorrido++
+								fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+							}
+
+						}
+
 					}
 				}
 			}
+
 		}
+
+		//fmt.Println("recorrido = ", recorrido)
+
+		/*fmt.Println("----------------------------------------------------------------------------------")
+		fmt.Println("iteracion: ", i, " | palabra restante: -", texto, "- | recorrido va en: ", recorrido)
+		fmt.Println("----------------------------------------------------------------------------------")*/
 	}
 
 }
@@ -103,6 +125,15 @@ func esIgualacion(texto string) int {
 
 func esAritmetico(texto string) int {
 	valido, tam := automatas.EvaluarAritmetico(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esLogico(texto string) int {
+	valido, tam := automatas.EvaluarLogico(texto)
 	if valido {
 		return tam
 	} else {

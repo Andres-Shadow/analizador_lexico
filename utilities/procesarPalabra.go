@@ -1,5 +1,6 @@
 package utilities
 
+/*
 import (
 	"proyecto_tlf/automatas"
 )
@@ -34,30 +35,30 @@ func VerificarPalabraIngresada(palabra string) string {
 		return result
 	}
 
-	/*if automatas.EvaluarAritmetico(palabra) {
+	if automatas.EvaluarAritmetico(palabra) {
 		result = "aritmetico"
 		return result
-	}*/
+	}
 
 	if automatas.EvaluarLogico(palabra) {
 		result = "logico"
 		return result
 	}
 
-	/*if automatas.EvaluarCadena(palabra) {
+	if automatas.EvaluarCadena(palabra) {
 		result = "cadena"
 		return result
-	}*/
+	}
 
 	if automatas.EvaluarAutomataS(palabra) {
 		result = "identificador"
 		return result
 	}
 
-	/*if automatas.EvaluarIgualacion(palabra) {
+	if automatas.EvaluarIgualacion(palabra) {
 		result = "igualacion"
 		return result
-	}*/
+	}
 
 	if automatas.EvaluarTerminal(palabra) {
 		result = "terminal"
@@ -65,4 +66,4 @@ func VerificarPalabraIngresada(palabra string) string {
 	}
 
 	return result
-}
+}*/
