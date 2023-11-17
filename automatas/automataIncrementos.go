@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 type EstadoIncrementos int
 
@@ -108,15 +109,24 @@ func (a *AutomataIncremento) procesarIncremento(simbolo rune) {
 	}
 }
 
-func EvaluarIncremento(cadena string) bool {
+func EvaluarIncrementos(cadena string) (bool, int) {
 	automata := &AutomataIncremento{}
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarIncremento(simbolo)
+
+		if automata.estadoActual == EstadoFinalIncremento {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorIncremento {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalIncremento {
-		return true
+		fmt.Println("es un operador de incremento", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }

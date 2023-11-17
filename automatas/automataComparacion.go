@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 type EstadoComparacion int
 
@@ -42,16 +43,25 @@ func (a *AutomataComparacion) procesarPalabra(simbolo rune) {
 
 }
 
-func EvaluarComparacion(cadena string) bool {
+func EvaluarComparacion(cadena string) (bool, int) {
 	automata := &AutomataComparacion{}
-
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarPalabra(simbolo)
+
+		if automata.estadoActual == EstadoFinalComparacion {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorComparacion {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalComparacion {
-		return true
+		fmt.Println("es un operador de comparacion", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
+
