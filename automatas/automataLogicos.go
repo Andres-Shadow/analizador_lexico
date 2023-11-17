@@ -1,4 +1,5 @@
 package automatas
+import "fmt"
 
 type EstadoLogico int
 
@@ -27,15 +28,24 @@ func (a *AutomataLogico) procesarLogico(simbolo rune) {
 	}
 }
 
-func EvaluarLogico(cadena string) bool {
+func EvaluarLogico(cadena string) (bool, int) {
 	automata := &AutomataLogico{}
-	for _, simbolo := range cadena {
+	var iterator int
+	for i, simbolo := range cadena {
 		automata.procesarLogico(simbolo)
+
+		if automata.estadoActual == EstadoFinalLogico {
+			iterator = i + 1
+			break
+		} else if automata.estadoActual == EstadoErrorLogico {
+			break
+		}
 	}
 
 	if automata.estadoActual == EstadoFinalLogico {
-		return true
+		fmt.Println("es un operador logico", cadena[:iterator])
+		return true, iterator
 	} else {
-		return false
+		return false, len(cadena)
 	}
 }
