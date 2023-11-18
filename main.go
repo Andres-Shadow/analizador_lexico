@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"proyecto_tlf/automatas"
+	"proyecto_tlf/utilities"
 )
 
 func main() {
-	texto := "h22AAh"
-	//texto := utilities.LeerArchivo("./entrada.txt")
+	//texto := "h22AAh"
+	utilities.EliminarArchivo("./salida.txt")
+	texto := utilities.LeerArchivo("./entrada.txt")
 	var txtOriginal string
 	var recorrido int
 	recorrido = 0

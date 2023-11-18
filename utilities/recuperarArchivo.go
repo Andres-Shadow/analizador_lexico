@@ -11,3 +11,4 @@ func LeerArchivo(nombreArchivo string) string {
 	// Convierte el contenido a un string y lo retorna
 	return string(contenido)
 }
+
