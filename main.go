@@ -6,16 +6,15 @@ import (
 )
 
 func main() {
-	//texto := "?nombre mi socio? .=       ms pr pr pr   aaaa & n45n"
-	texto := "h22AB2h"
+	texto := "h22AAh"
 	//texto := utilities.LeerArchivo("./entrada.txt")
 	var txtOriginal string
 	var recorrido int
 	recorrido = 0
 	txtOriginal = texto
 	fin := len(txtOriginal)
+
 	for i := 0; recorrido < fin; i++ {
-		//for i := 0; i < 2; i++ {
 		if recorrido < fin {
 			texto = txtOriginal[recorrido:fin]
 			posicion := esCadena(texto)

@@ -28,8 +28,8 @@ func (a *AutomataHexadecimal) procesarHexadecimal(simbolo rune) {
 			a.estadoActual = EstadoNoAceptadoHexadecimal
 		}
 	case EstadoIntermedioHexadecimal:
-		if !esMayusculaValida(simbolo) {
-			a.estadoActual = EstadoErrorHexadecimal
+		if esMayusculaValida(simbolo) {
+			a.estadoActual = EstadoIntermedioHexadecimal
 		} else if simbolo == 'h' {
 			a.estadoActual = EstadoFinalHexadecimal
 		} else {
