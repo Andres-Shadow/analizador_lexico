@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	//texto := "h22AAh"
 	utilities.EliminarArchivo("./salida.txt")
 	texto := utilities.LeerArchivo("./entrada.txt")
 	var txtOriginal string
@@ -83,13 +82,21 @@ func main() {
 															if posicion != -1 {
 																recorrido += posicion
 															} else {
-																// error
-																if txtOriginal[recorrido] == ' ' {
-																	recorrido++
+																posicion = esPalabraReservada(texto)
+																if posicion != -1 {
+																	recorrido += posicion
 																} else {
-																	recorrido++
-																	fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+																	// error
+																	if txtOriginal[recorrido] == ' ' {
+																		recorrido++
+																	} else {
+																		recorrido++
+																		contenido := txtOriginal[recorrido-1:recorrido] + " -> token no reconocido"
+																		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+
+																	}
 																}
+
 															}
 
 														}
@@ -110,14 +117,17 @@ func main() {
 			}
 
 		}
-
-		//fmt.Println("recorrido = ", recorrido)
-
-		/*fmt.Println("----------------------------------------------------------------------------------")
-		fmt.Println("iteracion: ", i, " | palabra restante: -", texto, "- | recorrido va en: ", recorrido)
-		fmt.Println("----------------------------------------------------------------------------------")*/
 	}
 
+}
+
+func esPalabraReservada(texto string) int {
+	valido, tam := automatas.EvaluarPR(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
 }
 
 func esCadena(texto string) int {
