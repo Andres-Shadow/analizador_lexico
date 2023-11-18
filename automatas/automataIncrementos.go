@@ -5,19 +5,11 @@ type EstadoIncrementos int
 
 const (
 	EstadoInicialIncremento EstadoIncrementos = iota
-	EstadoInicialMsMn
-	EstadoIntermedioMs
-	EstadoFinalMs
-	EstadoIntermedioMn
-	EstadoFinalMn
-	EstadoInicialPr
-	EstadoIntermedioPr
-	EstadoFinalPr
-	EstadoInicialDv
-	EstadoIntermedioDv
-	EstadoFinalDv
+	EstadoInicialSumIncr
+	EstadoInicialResIncr
 	EstadoFinalIncremento
 	EstadoErrorIncremento
+	EstadoNoAceptadoIncremento
 )
 
 type AutomataIncremento struct {
@@ -27,81 +19,23 @@ type AutomataIncremento struct {
 func (a *AutomataIncremento) procesarIncremento(simbolo rune) {
 	switch a.estadoActual {
 	case EstadoInicialIncremento:
-		if simbolo == 'm' {
-			a.estadoActual = EstadoInicialMsMn
-		} else if simbolo == 'p' {
-			a.estadoActual = EstadoInicialPr
-		} else if simbolo == 'd' {
-			a.estadoActual = EstadoInicialDv
-		} else {
-			a.estadoActual = EstadoErrorIncremento
+		if simbolo == '{'{
+			a.estadoActual = EstadoInicialSumIncr
+		}else if simbolo == '}'{
+			a.estadoActual = EstadoInicialResIncr
+		}else{
+			a.estadoActual = EstadoNoAceptadoIncremento
 		}
-	case EstadoInicialMsMn:
-		if simbolo == 's' {
-			a.estadoActual = EstadoIntermedioMs
-		} else if simbolo == 'n' {
-			a.estadoActual = EstadoIntermedioMn
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoInicialPr:
-		if simbolo == 'r' {
-			a.estadoActual = EstadoIntermedioPr
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoInicialDv:
-		if simbolo == 'v' {
-			a.estadoActual = EstadoIntermedioDv
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoIntermedioMs:
-		if simbolo == 'm' {
-			a.estadoActual = EstadoFinalMs
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoIntermedioMn:
-		if simbolo == 'm' {
-			a.estadoActual = EstadoFinalMn
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoIntermedioPr:
-		if simbolo == 'p' {
-			a.estadoActual = EstadoFinalPr
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoIntermedioDv:
-		if simbolo == 'd' {
-			a.estadoActual = EstadoFinalDv
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoFinalMs:
-		if simbolo == 's' {
+	case EstadoInicialResIncr:
+		if simbolo == '}'{
 			a.estadoActual = EstadoFinalIncremento
-		} else {
+		}else{
 			a.estadoActual = EstadoErrorIncremento
 		}
-	case EstadoFinalMn:
-		if simbolo == 'n' {
+	case EstadoInicialSumIncr:
+		if simbolo == '{'{
 			a.estadoActual = EstadoFinalIncremento
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoFinalPr:
-		if simbolo == 'r' {
-			a.estadoActual = EstadoFinalIncremento
-		} else {
-			a.estadoActual = EstadoErrorIncremento
-		}
-	case EstadoFinalDv:
-		if simbolo == 'v' {
-			a.estadoActual = EstadoFinalIncremento
-		} else {
+		}else{
 			a.estadoActual = EstadoErrorIncremento
 		}
 	case EstadoFinalIncremento:

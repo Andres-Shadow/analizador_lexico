@@ -1,6 +1,9 @@
 package automatas
 
-import "fmt"
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoCadena int
 
@@ -9,6 +12,7 @@ const (
 	EstadoIntermedioCadena
 	EstadoFinalCadena
 	EstadoErrorCadena
+	EstadoNoAceptado
 )
 
 type AutomataCadena struct {
@@ -21,41 +25,56 @@ func (a *AutomataCadena) procesarPalabra(simbolo rune) {
 		if simbolo == '?' {
 			a.estadoActual = EstadoIntermedioCadena
 		} else {
-			a.estadoActual = EstadoErrorCadena
+			a.estadoActual = EstadoNoAceptado
 		}
 	case EstadoIntermedioCadena:
-		if esCaracterValido(simbolo) {
+		if simbolo != '?' {
 			//sigue en el mismo estado
 		} else if simbolo == '?' {
 			a.estadoActual = EstadoFinalCadena
-		} else {
-			a.estadoActual = EstadoErrorCadena
 		}
 	case EstadoFinalCadena:
 		a.estadoActual = EstadoErrorCadena
 	}
 }
 
-func EvaluarCadena(cadena string) (bool, int, string) {
+func EvaluarCadena(cadena string) (bool, int) {
 	automata := &AutomataCadena{}
 	var iterator int
 
 	for i, simbolo := range cadena {
 		automata.procesarPalabra(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptado {
+			break
+		}
 		// Agregar tu condición de parada aquí
 		if automata.estadoActual == EstadoFinalCadena {
 			iterator = i + 1
 			break
-		} else if automata.estadoActual == EstadoErrorCadena {
+		}
+		if i == len(cadena)-1 && i != '?'{
+			automata.estadoActual = EstadoErrorCadena
+			iterator = i +1
 			break
 		}
 	}
 
+
+
 	if automata.estadoActual == EstadoFinalCadena {
+		contenido := cadena[:iterator] + " -> cadena"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un cadena: ", cadena[:iterator])
-		return true, iterator, cadena[iterator:]
-	} else {
-		return false, len(cadena), cadena
+		return true, iterator
 	}
+
+	if automata.estadoActual == EstadoErrorCadena {
+		contenido := cadena[:iterator] + " -> error sintactivo cadena"
+		fmt.Println("error sintactico -> : ", cadena[:iterator])
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		return true, iterator
+	}
+
+	return false, len(cadena)
 }

@@ -6,29 +6,26 @@ import (
 )
 
 func main() {
-	texto := "?nombre mi socio? .=       ms pr pr pr   aaaa &"
+	//texto := "?nombre mi socio? .=       ms pr pr pr   aaaa & n45n"
+	texto := "?nombre"
+	//texto := utilities.LeerArchivo("./entrada.txt")
 	var txtOriginal string
 	var recorrido int
 	recorrido = 0
 	txtOriginal = texto
 	fin := len(txtOriginal)
 
-	for i := 0; recorrido < fin; i++ {
-		//for i := 0; i < 1; i++ {
-
+	//for i := 0; recorrido < fin; i++ {
+	for i := 0; i < 2; i++ {
 		if recorrido < fin {
 			texto = txtOriginal[recorrido:fin]
-
-			/*fmt.Println("----------------------------------------------------------------------------------")
-			fmt.Println("iteracion: ", i, " | palabra restante: -", texto, "- | recorrido va en: ", recorrido)
-			fmt.Println("----------------------------------------------------------------------------------")*/
 
 			posicion := esCadena(texto)
 
 			if posicion != -1 {
 				recorrido += posicion
 			} else {
-				posicion = esIgualacion(texto)
+				posicion = esAsignacion(texto)
 				if posicion != -1 {
 					recorrido += posicion
 				} else {
@@ -40,12 +37,18 @@ func main() {
 						if posicion != -1 {
 							recorrido += posicion
 						} else {
-
-							if txtOriginal[recorrido] == ' ' {
-								recorrido++
+							posicion = esNaturla(texto)
+							if posicion != -1 {
+								recorrido += posicion
 							} else {
-								recorrido++
-								fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+								//error
+								if txtOriginal[recorrido] == ' ' {
+									recorrido++
+								} else {
+									recorrido++
+									fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+								}
+
 							}
 
 						}
@@ -65,48 +68,8 @@ func main() {
 
 }
 
-/*func main() {
-	texto := "$nombre mi socio$ .=       ms pr pr pr   aaaa"
-	var txtOriginal string
-	var recorrido int
-	recorrido = 0
-	txtOriginal = texto
-	fin := len(txtOriginal)
-
-	texto = strings.TrimSpace(texto)
-	for i := 0; i < 100; i++ {
-		// fmt.Println("evaluando: -", texto, "-")
-		tamCadena := esCadena(texto)
-		if tamCadena != -1 {
-			recorrido += tamCadena
-			texto = txtOriginal[recorrido:fin]
-		} else {
-			tamIgualacion := esIgualacion(texto)
-			if tamIgualacion != len(texto) {
-				recorrido += tamIgualacion
-				texto = txtOriginal[recorrido:fin]
-			} else {
-				tamAritmetico := esAritmetico(texto)
-				if tamAritmetico != len(texto) {
-					recorrido += tamAritmetico
-					texto = txtOriginal[recorrido:fin]
-				} else {
-					fmt.Println("se detectó un error: ", texto)
-					recorrido++
-					texto = txtOriginal[recorrido:fin]
-				}
-			}
-		}
-
-		if recorrido >= len(txtOriginal)-1 {
-			fmt.Println("no hay más palabras")
-			break
-		}
-	}
-}*/
-
 func esCadena(texto string) int {
-	valido, tam, _ := automatas.EvaluarCadena(texto)
+	valido, tam := automatas.EvaluarCadena(texto)
 	if valido {
 		return tam
 	} else {
@@ -114,8 +77,8 @@ func esCadena(texto string) int {
 	}
 }
 
-func esIgualacion(texto string) int {
-	valido, tam, _ := automatas.EvaluarIgualacion(texto)
+func esAsignacion(texto string) int {
+	valido, tam := automatas.EvaluarIgualacion(texto)
 	if valido {
 		return tam
 	} else {
@@ -134,6 +97,78 @@ func esAritmetico(texto string) int {
 
 func esLogico(texto string) int {
 	valido, tam := automatas.EvaluarLogico(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esNaturla(texto string) int {
+	valido, tam := automatas.EvaluarNatural(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esReal(texto string) int {
+	valido, tam := automatas.EvaluarReales(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esComparacion(texto string) int {
+	valido, tam := automatas.EvaluarComparacion(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esIncremento(texto string) int {
+	valido, tam := automatas.EvaluarIncrementos(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esTerminal(texto string) int {
+	valido, tam := automatas.EvaluarTerminal(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esSeparador(texto string) int {
+	valido, tam := automatas.EvaluarSeparador(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esHexadecimal(texto string) int {
+	valido, tam := automatas.EvalaurHexadecimal(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esComentario(texto string) int {
+	valido, tam := automatas.EvaluarComentario(texto)
 	if valido {
 		return tam
 	} else {

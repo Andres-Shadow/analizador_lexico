@@ -1,1 +1,1 @@
-n56n natural_true
+?nombre? -> cadena

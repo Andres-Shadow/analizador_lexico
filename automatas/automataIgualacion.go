@@ -34,7 +34,7 @@ func (a *AutomataIgualacion) procesarIgualacion(simbolo rune) {
 	}
 }
 
-func EvaluarIgualacion(cadena string) (bool, int, string) {
+func EvaluarIgualacion(cadena string) (bool, int) {
 	automata := &AutomataIgualacion{}
 	var iterator int
 	for i, simbolo := range cadena {
@@ -50,8 +50,8 @@ func EvaluarIgualacion(cadena string) (bool, int, string) {
 
 	if automata.estadoActual == EstadoFinalIgualacion {
 		fmt.Println("es un igualacion: ", cadena[:iterator])
-		return true, iterator, cadena[iterator:]
+		return true, iterator
 	} else {
-		return false, len(cadena), cadena
+		return false, len(cadena)
 	}
 }
