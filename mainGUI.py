@@ -47,9 +47,17 @@ imagen_fondo = ImageTk.PhotoImage(Image.open(ruta_imagen))
 fondo_label = tk.Label(ventana, image=imagen_fondo)
 fondo_label.place(x=0, y=0, relwidth=1, relheight=1)  # Cubre toda la ventana
 
+# Frame para contener la etiqueta de instrucciones
+frame_instrucciones = ttk.Frame(ventana, style="My.TFrame")
+frame_instrucciones.pack(pady=10)
+
 # Etiqueta de instrucciones
-instrucciones_label = tk.Label(ventana, text="Ingrese las líneas de código:", font=("Arial", 14), background="#ffffff")
-instrucciones_label.pack(pady=10)
+instrucciones_label = tk.Label(frame_instrucciones, text="Ingrese las líneas de código:", font=("Arial", 14), background="#ffffff")
+instrucciones_label.pack()
+
+# Aplicar estilo al frame
+style = ttk.Style()
+style.configure("My.TFrame", borderwidth=3, highlightcolor="green")  # Ajusta el borderwidth y highlightcolor
 
 # Área de texto para ingresar código
 text_area = scrolledtext.ScrolledText(ventana, wrap=tk.WORD, width=50, height=10, font=("Courier New", 12))
@@ -58,6 +66,10 @@ text_area.pack(padx=20, pady=10)  # Agrega márgenes a la izquierda y derecha
 # Frame para contener los botones
 botones_frame = ttk.Frame(ventana)
 botones_frame.pack()
+
+# Estilo de los botones
+style.configure("TButton", padding=10, relief="flat", background="#4CAF50", foreground="black", font=("Arial", 12),
+                borderwidth=3, highlightcolor="green")  # Ajusta el borderwidth y highlightcolor
 
 # Botón para guardar el texto en un archivo
 guardar_button = ttk.Button(botones_frame, text="Guardar Texto", command=guardar_texto)
@@ -77,3 +89,4 @@ resultado_text.pack(pady=20)  # Agrega margen hacia abajo
 
 # Inicia el bucle de la aplicación
 ventana.mainloop()
+
