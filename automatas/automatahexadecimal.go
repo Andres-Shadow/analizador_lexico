@@ -29,8 +29,10 @@ func (a *AutomataHexadecimal) procesarHexadecimal(simbolo rune) {
 		}
 	case EstadoIntermedioHexadecimal:
 		if esMayusculaValida(simbolo) {
+			fmt.Println("sigue aqui")
 			a.estadoActual = EstadoIntermedioHexadecimal
 		} else if simbolo == 'h' {
+			fmt.Println("llego al final")
 			a.estadoActual = EstadoFinalHexadecimal
 		} else {
 			a.estadoActual = EstadoIntermedioHexadecimal
@@ -50,6 +52,7 @@ func EvalaurHexadecimal(cadena string) (bool, int) {
 	var iterator int
 
 	for i, simbolo := range cadena {
+		fmt.Println(simbolo)
 		automata.procesarHexadecimal(simbolo)
 
 		if automata.estadoActual == EstadoNoAceptadoHexadecimal {
@@ -57,13 +60,13 @@ func EvalaurHexadecimal(cadena string) (bool, int) {
 		}
 
 		if automata.estadoActual == EstadoFinalHexadecimal {
-			iterator = iterator + 1
+			iterator = i + 1
 			break
 		}
 
 		if i == len(cadena)-1 && i != 'h' {
 			automata.estadoActual = EstadoErrorHexadecimal
-			iterator = iterator + 1
+			iterator = i + 1
 			break
 		}
 	}
@@ -71,7 +74,7 @@ func EvalaurHexadecimal(cadena string) (bool, int) {
 	if automata.estadoActual == EstadoFinalHexadecimal {
 		contenido := cadena[:iterator] + " -> hexadecimal"
 		utilities.GuardarEnArchivo(contenido, "./salida.txt")
-		fmt.Println("es un cadena: ", cadena[:iterator])
+		fmt.Println("es un hexadecimal: ", cadena[:iterator])
 		return true, iterator
 	}
 
