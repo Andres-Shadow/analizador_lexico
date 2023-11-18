@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 from tkinter import ttk
 from tkinter import messagebox
-import subprocess
+from PIL import Image, ImageTk  # Importa las clases necesarias de Pillow
 
 # Establecer el directorio de trabajo al mismo que el script
 ruta_script = os.path.dirname(os.path.abspath(__file__))
@@ -39,12 +39,16 @@ ventana.title("Analizador Léxico")
 ventana.geometry("600x500")  # Tamaño predeterminado
 ventana.resizable(False, False)  # Ventana no redimensionable
 
-# Estilo de los botones
-style = ttk.Style()
-style.configure("TButton", padding=10, relief="flat", background="#4CAF50", foreground="black", font=("Arial", 12))
+# Cargar la imagen de fondo
+ruta_imagen = os.path.join(ruta_script, "fondo.png")
+imagen_fondo = ImageTk.PhotoImage(Image.open(ruta_imagen))
+
+# Establecer la imagen de fondo en la ventana
+fondo_label = tk.Label(ventana, image=imagen_fondo)
+fondo_label.place(x=0, y=0, relwidth=1, relheight=1)  # Cubre toda la ventana
 
 # Etiqueta de instrucciones
-instrucciones_label = tk.Label(ventana, text="Ingrese las líneas de código:", font=("Arial", 14))
+instrucciones_label = tk.Label(ventana, text="Ingrese las líneas de código:", font=("Arial", 14), background="#ffffff")
 instrucciones_label.pack(pady=10)
 
 # Área de texto para ingresar código
