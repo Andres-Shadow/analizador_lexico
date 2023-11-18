@@ -1,5 +1,9 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoTermial int
 
@@ -8,6 +12,7 @@ const (
 	EstadoIntermedioTerminal
 	EstadoFinalTermianl
 	EstadoErrorTerminal
+	EstadoNoAceptadoTerminal
 )
 
 type AutomataTerminal struct {
@@ -22,7 +27,7 @@ func (a *AutomataTerminal) procesarTerminal(simbolo rune) {
 		} else if simbolo == '\n' {
 			a.estadoActual = EstadoFinalTermianl
 		} else {
-			a.estadoActual = EstadoErrorTerminal
+			a.estadoActual = EstadoNoAceptadoTerminal
 		}
 	case EstadoFinalTermianl:
 		a.estadoActual = EstadoErrorTerminal
@@ -35,19 +40,22 @@ func EvaluarTerminal(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.procesarTerminal(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoTerminal {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalTermianl {
 			iterator = i + 1
-			break
-		} else if automata.estadoActual == EstadoErrorTerminal {
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalTermianl {
-		fmt.Println("es un final de sentencia", cadena[:iterator])
+		contenido := cadena[:iterator] + " -> terminal"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("es un operador terminal", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
-}
+	return false, len(cadena)
 
+}

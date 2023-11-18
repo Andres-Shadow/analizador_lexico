@@ -1,6 +1,9 @@
 package automatas
 
-import "fmt"
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoAritmetico int
 
@@ -12,6 +15,7 @@ const (
 	EstadoIncialDivision
 	EstadoFInalAritmetico
 	EstadoErrorAritmetico
+	EstadoNoAceptadoAritmetico
 )
 
 type AutomataArimetico struct {
@@ -30,7 +34,7 @@ func (a *AutomataArimetico) procesarArimetico(simbolo rune) {
 		} else if simbolo == 'd' {
 			a.estadoActual = EstadoIncialDivision
 		} else {
-			a.estadoActual = EstadoErrorAritmetico
+			a.estadoActual = EstadoNoAceptadoAritmetico
 		}
 	case EstadoIncialSuma:
 		if simbolo == 's' {
@@ -68,18 +72,32 @@ func EvaluarAritmetico(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.procesarArimetico(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoAritmetico{
+			break
+		}
+
 		if automata.estadoActual == EstadoFInalAritmetico {
 			iterator = i + 1
 			break
 		} else if automata.estadoActual == EstadoErrorAritmetico {
+			iterator = i+1
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFInalAritmetico {
+		contenido := cadena[:iterator] + " -> aritmetico"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un operador aritmetico", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
+	} 
+
+	if automata.estadoActual == EstadoErrorAritmetico {
+		contenido := cadena[:iterator] + " -> error sintactico aritmetico"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("error sintactico aritmetico ->", cadena[:iterator])
+		return true, iterator
 	}
+	return false, len(cadena)
+	
 }

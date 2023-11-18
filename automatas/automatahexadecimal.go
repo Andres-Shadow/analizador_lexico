@@ -33,7 +33,7 @@ func (a *AutomataHexadecimal) procesarHexadecimal(simbolo rune) {
 		} else if simbolo == 'h' {
 			a.estadoActual = EstadoFinalHexadecimal
 		} else {
-			//se mantiene en el estado
+			a.estadoActual = EstadoIntermedioHexadecimal
 		}
 	case EstadoFinalHexadecimal:
 		a.estadoActual = EstadoErrorHexadecimal

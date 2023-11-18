@@ -1,16 +1,21 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoReales int
 
 const (
 	EstadoInicial EstadoReales = iota
 	EstadoR
-	EstadoNumeros
-	EstadoComa
-	EstadoDespuesComa
-	EstadoFinal
-	EstadoError
+	EstadoNumerosReal
+	EstadoComaReal
+	EstadoDespuesComaReal
+	EstadoFinalReal
+	EstadoErrorReal
+	EstadoNoAceptadoReal
 )
 
 type AutomataNumeroReal struct {
@@ -23,38 +28,38 @@ func (a *AutomataNumeroReal) ProcesarSimbolo(simbolo rune) {
 		if simbolo == 'r' {
 			a.estadoActual = EstadoR
 		} else {
-			a.estadoActual = EstadoError
+			a.estadoActual = EstadoNoAceptadoReal
 		}
 	case EstadoR:
 		if esDigito(simbolo) {
-			a.estadoActual = EstadoNumeros
+			a.estadoActual = EstadoNumerosReal
 		} else {
-			a.estadoActual = EstadoError
+			a.estadoActual = EstadoErrorReal
 		}
-	case EstadoNumeros:
+	case EstadoNumerosReal:
 		if esDigito(simbolo) {
 			// Permanecer en el estado de números
 		} else if simbolo == ',' {
-			a.estadoActual = EstadoComa
+			a.estadoActual = EstadoComaReal
 		} else {
-			a.estadoActual = EstadoError
+			a.estadoActual = EstadoErrorReal
 		}
-	case EstadoComa:
+	case EstadoComaReal:
 		if simbolo == '0' || esDigito(simbolo) {
-			a.estadoActual = EstadoDespuesComa
+			a.estadoActual = EstadoDespuesComaReal
 		} else {
-			a.estadoActual = EstadoError
+			a.estadoActual = EstadoErrorReal
 		}
-	case EstadoDespuesComa:
+	case EstadoDespuesComaReal:
 		if esDigito(simbolo) {
 			// Permanecer en el estado después de la coma
 		} else if simbolo == 'r' {
-			a.estadoActual = EstadoFinal
+			a.estadoActual = EstadoFinalReal
 		} else {
-			a.estadoActual = EstadoError
+			a.estadoActual = EstadoErrorReal
 		}
-	case EstadoFinal:
-		a.estadoActual = EstadoError
+	case EstadoFinalReal:
+		a.estadoActual = EstadoErrorReal
 	}
 }
 
@@ -68,18 +73,39 @@ func EvaluarReales(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
 
-		if automata.estadoActual == EstadoFinal {
+		if automata.estadoActual == EstadoNoAceptadoReal {
+			break
+		}
+
+		if automata.estadoActual == EstadoFinalReal {
 			iterator = i + 1
 			break
-		} else if automata.estadoActual == EstadoError {
+		} else if automata.estadoActual == EstadoErrorReal {
+			iterator = i + 1
+			break
+		}
+
+		if i == len(cadena)-1 && simbolo != 'r' {
+			automata.estadoActual = EstadoErrorReal
+			iterator = i
 			break
 		}
 	}
 
-	if automata.estadoActual == EstadoFinal {
-		fmt.Println("es un numero real", cadena[:iterator])
+	if automata.estadoActual == EstadoFinalReal {
+		contenido := cadena[:iterator] + " -> numero real"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("es un numero real ", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+
+	if automata.estadoActual == EstadoErrorReal {
+		contenido := cadena[:iterator] + " -> error sintactico numero real"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("error sintactico numero real ", cadena[:iterator])
+		return true, iterator
+	}
+
+	return false, len(cadena)
+
 }

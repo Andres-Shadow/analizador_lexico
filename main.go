@@ -7,22 +7,21 @@ import (
 
 func main() {
 	//texto := "?nombre mi socio? .=       ms pr pr pr   aaaa & n45n"
-	texto := "?nombre"
+	texto := "h22AB2h"
 	//texto := utilities.LeerArchivo("./entrada.txt")
 	var txtOriginal string
 	var recorrido int
 	recorrido = 0
 	txtOriginal = texto
 	fin := len(txtOriginal)
-
-	//for i := 0; recorrido < fin; i++ {
-	for i := 0; i < 2; i++ {
+	for i := 0; recorrido < fin; i++ {
+		//for i := 0; i < 2; i++ {
 		if recorrido < fin {
 			texto = txtOriginal[recorrido:fin]
-
 			posicion := esCadena(texto)
 
 			if posicion != -1 {
+
 				recorrido += posicion
 			} else {
 				posicion = esAsignacion(texto)
@@ -30,23 +29,75 @@ func main() {
 					recorrido += posicion
 				} else {
 					posicion = esAritmetico(texto)
+
 					if posicion != -1 {
+
 						recorrido += posicion
 					} else {
 						posicion = esLogico(texto)
 						if posicion != -1 {
 							recorrido += posicion
 						} else {
-							posicion = esNaturla(texto)
+							posicion = esNatural(texto)
 							if posicion != -1 {
+
 								recorrido += posicion
 							} else {
-								//error
-								if txtOriginal[recorrido] == ' ' {
-									recorrido++
+
+								posicion = esReal(texto)
+								if posicion != -1 {
+
+									recorrido += posicion
 								} else {
-									recorrido++
-									fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+
+									posicion = esComparacion(texto)
+									if posicion != -1 {
+
+										recorrido += posicion
+									} else {
+										posicion = esIncremento(texto)
+										if posicion != -1 {
+
+											recorrido += posicion
+										} else {
+											posicion = esTerminal(texto)
+											if posicion != -1 {
+
+												recorrido += posicion
+											} else {
+												posicion = esSeparador(texto)
+												if posicion != -1 {
+													fmt.Println("entro aqui")
+													recorrido += posicion
+												} else {
+													posicion = esHexadecimal(texto)
+													if posicion != -1 {
+														recorrido += posicion
+													} else {
+														posicion = esComentario(texto)
+														if posicion != -1 {
+															recorrido += posicion
+														} else {
+															posicion = esIdentificador(texto)
+															if posicion != -1 {
+																recorrido += posicion
+															} else {
+																// error
+																if txtOriginal[recorrido] == ' ' {
+																	recorrido++
+																} else {
+																	recorrido++
+																	fmt.Println("es un error: -", txtOriginal[recorrido-1:recorrido], " -")
+																}
+															}
+
+														}
+													}
+												}
+											}
+										}
+									}
+
 								}
 
 							}
@@ -104,7 +155,7 @@ func esLogico(texto string) int {
 	}
 }
 
-func esNaturla(texto string) int {
+func esNatural(texto string) int {
 	valido, tam := automatas.EvaluarNatural(texto)
 	if valido {
 		return tam
@@ -169,6 +220,15 @@ func esHexadecimal(texto string) int {
 
 func esComentario(texto string) int {
 	valido, tam := automatas.EvaluarComentario(texto)
+	if valido {
+		return tam
+	} else {
+		return -1
+	}
+}
+
+func esIdentificador(texto string) int {
+	valido, tam := automatas.EvaluarIdentificador(texto)
 	if valido {
 		return tam
 	} else {

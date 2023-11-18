@@ -1,5 +1,10 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
+
 type EstadoComentario int
 
 const (
@@ -16,6 +21,8 @@ const (
 	//estado final
 	EstadoFinalComentario
 	EstadoErrorComentario
+
+	EstadoNoAceptadoComentario
 )
 
 type AutomataComentario struct {
@@ -30,10 +37,10 @@ func (a *AutomataComentario) procesarComentario(simbolo rune) {
 		} else if simbolo == '/' {
 			a.estadoActual = EstadoInicioComBlo
 		} else {
-			a.estadoActual = EstadoErrorComentario
+			a.estadoActual = EstadoNoAceptadoComentario
 		}
 	case EstadoInicioComLinea:
-		terminal,_ := EvaluarTerminal(string(simbolo))
+		terminal, _ := EvaluarTerminal(string(simbolo))
 		if terminal == true {
 			a.estadoActual = EstadoFinalComentario
 		} else {
@@ -71,18 +78,43 @@ func EvaluarComentario(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.procesarComentario(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoComentario {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalComentario {
+
 			iterator = i + 1
 			break
-		} else if automata.estadoActual == EstadoErrorComentario {
+		}
+
+		if automata.estadoActual == EstadoErrorComentario {
+			iterator = i + 1
+			break
+		}
+
+		x := simbolo != ';'
+		if i == len(cadena)-1 && (x || simbolo != '/') {
+			automata.estadoActual = EstadoErrorComentario
+			iterator = i + 1
 			break
 		}
 	}
 
+	
 	if automata.estadoActual == EstadoFinalComentario {
+		contenido := cadena[:iterator] + " -> comentario"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un comentario", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+
+	if automata.estadoActual == EstadoErrorComentario {
+
+		contenido := cadena[:iterator] + " -> erros sintactico comentario"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		return true, iterator
+	}
+	return false, len(cadena)
+
 }

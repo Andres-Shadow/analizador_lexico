@@ -1,1 +1,17 @@
-?nombre? -> cadena
+/#aaa# -> erros sintactico comentario
+$a -> error sintactico identificador
+$$aaaaaaaaaaa -> error sintactico identificador
+$$aaaaaaaaaaa -> error sintactico identificador
+$$aaaaaaaaaaa -> error sintactico identificador
+$a -> error sintactico identificador
+$$aaaaaaaaa$$ -> identificador
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal
+h -> error sintactivo hexadecimal

@@ -1,5 +1,9 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 // Definición del tipo de estado
 type EstadoNatural int
@@ -9,6 +13,7 @@ const (
 	EstadoNumeroNatural
 	EstadoFinalNatural
 	EstadoErrorNatural
+	EstadoNoAceptadoNatural
 )
 
 type AutomataNatural struct {
@@ -21,7 +26,7 @@ func (a *AutomataNatural) ProcesarSimbolo(simbolo rune) {
 		if simbolo == 'n' {
 			a.estadoActual = EstadoNumeroNatural
 		} else {
-			a.estadoActual = EstadoErrorNatural
+			a.estadoActual = EstadoNoAceptadoNatural
 		}
 	case EstadoNumeroNatural:
 		if esDigito(simbolo) {
@@ -46,18 +51,40 @@ func EvaluarNatural(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoNatural {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalNatural {
 			iterator = i + 1
 			break
 		} else if automata.estadoActual == EstadoErrorNatural {
+			//fmt.Println("entro aqui")
+			iterator = i + 1
+			break
+		}
+
+		if i == len(cadena)-1 && simbolo != 'n' {
+			automata.estadoActual = EstadoErrorNatural
+			iterator = i 
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalNatural {
+		contenido := cadena[:iterator] + " -> numero natural"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un numero natural", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+
+	if automata.estadoActual == EstadoErrorNatural {
+		contenido := cadena[:iterator] + " -> error sintactico natural"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("error sintactico numero natural -> ", cadena[:iterator])
+		return true, iterator
+	}
+
+	return false, len(cadena)
+
 }

@@ -1,5 +1,9 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoComparacion int
 
@@ -7,8 +11,10 @@ const (
 	EstadoInicialComparacion EstadoComparacion = iota
 	EstadoIntermedioComparacion
 	EstadoIntermedioIgualacion
+	EstadoPosIntermedioComparacion
 	EstadoFinalComparacion
 	EstadoErrorComparacion
+	EstadoNoAceptadoComparacion
 )
 
 type AutomataComparacion struct {
@@ -18,18 +24,24 @@ type AutomataComparacion struct {
 func (a *AutomataComparacion) procesarPalabra(simbolo rune) {
 	switch a.estadoActual {
 	case EstadoInicialComparacion:
-		if simbolo == 'm' || simbolo == 'e' {
+		if simbolo == 'M' {
 			a.estadoActual = EstadoIntermedioComparacion
-		} else if simbolo == 'e' {
+		} else if simbolo == 'E' {
 			a.estadoActual = EstadoIntermedioIgualacion
 		} else {
-			a.estadoActual = EstadoErrorComparacion
+			a.estadoActual = EstadoNoAceptadoComparacion
 		}
 	case EstadoIntermedioComparacion:
 		if simbolo == 'Q' || simbolo == 'N' {
 			a.estadoActual = EstadoFinalComparacion
 		} else {
 			a.estadoActual = EstadoErrorComparacion
+		}
+	case EstadoPosIntermedioComparacion:
+		if simbolo == ' ' {
+			a.estadoActual = EstadoFinalComparacion
+		} else if simbolo == 'E' {
+			a.estadoActual = EstadoIntermedioIgualacion
 		}
 	case EstadoIntermedioIgualacion:
 		if simbolo == 'Q' {
@@ -38,7 +50,11 @@ func (a *AutomataComparacion) procesarPalabra(simbolo rune) {
 			a.estadoActual = EstadoErrorComparacion
 		}
 	case EstadoFinalComparacion:
-		a.estadoActual = EstadoErrorComparacion
+		if simbolo == 'E' {
+			a.estadoActual = EstadoIntermedioIgualacion
+		} else {
+			a.estadoActual = EstadoErrorComparacion
+		}
 	}
 
 }
@@ -49,19 +65,35 @@ func EvaluarComparacion(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.procesarPalabra(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoComparacion {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalComparacion {
 			iterator = i + 1
 			break
 		} else if automata.estadoActual == EstadoErrorComparacion {
+			iterator = i + 1
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalComparacion {
-		fmt.Println("es un operador de comparacion", cadena[:iterator])
+		contenido := cadena[:iterator] + " -> comparacion"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("es un operador de comparacion ", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
-}
 
+	if automata.estadoActual == EstadoErrorComparacion {
+
+		contenido := cadena[:iterator] + " -> error sintactico comparacion"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		fmt.Println("error sintactico comparacion")
+		return true, iterator
+
+	}
+
+	return false, len(cadena)
+
+}

@@ -53,7 +53,7 @@ func EvaluarCadena(cadena string) (bool, int) {
 			iterator = i + 1
 			break
 		}
-		if i == len(cadena)-1 && i != '?'{
+		if i == len(cadena)-1 && simbolo != '?'{
 			automata.estadoActual = EstadoErrorCadena
 			iterator = i +1
 			break
@@ -71,7 +71,7 @@ func EvaluarCadena(cadena string) (bool, int) {
 
 	if automata.estadoActual == EstadoErrorCadena {
 		contenido := cadena[:iterator] + " -> error sintactivo cadena"
-		fmt.Println("error sintactico -> : ", cadena[:iterator])
+		fmt.Println("error sintactico cadena-> : ", cadena[:iterator])
 		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		return true, iterator
 	}

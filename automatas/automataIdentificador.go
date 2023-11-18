@@ -1,5 +1,9 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 // Definición del tipo de estado
 type EstadoS int
@@ -11,6 +15,7 @@ const (
 	EstadoPreFinalS
 	EstadoFinalS
 	EstadoErrorS
+	EstadoNoAceptadoIdentificador
 )
 
 type AutomataS struct {
@@ -25,7 +30,7 @@ func (a *AutomataS) ProcesarSimbolo(simbolo rune) {
 		if simbolo == '$' {
 			a.estadoActual = EstadoSegundaS
 		} else {
-			a.estadoActual = EstadoErrorS
+			a.estadoActual = EstadoNoAceptadoIdentificador
 		}
 	case EstadoSegundaS:
 		if simbolo == '$' {
@@ -67,18 +72,39 @@ func EvaluarIdentificador(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.ProcesarSimbolo(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoIdentificador {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalS {
 			iterator = i + 1
 			break
-		} else if automata.estadoActual == EstadoErrorS {
+		}
+		if automata.estadoActual == EstadoErrorS {
+			iterator = i + 1
+			break
+		}
+
+		if i == len(cadena)-1 && simbolo != '$' {
+			automata.estadoActual = EstadoErrorS
+			iterator = i+1
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalS {
+		contenido := cadena[:iterator] + " -> identificador"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un Identificador", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+
+	if automata.estadoActual == EstadoErrorS {
+		contenido := cadena[:iterator] + " -> error sintactico identificador"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
+		return true, iterator
+	}
+
+	return false, len(cadena)
+
 }

@@ -1,5 +1,9 @@
 package automatas
-import "fmt"
+
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoLogico int
 
@@ -7,6 +11,7 @@ const (
 	EstadoIncialLogico EstadoLogico = iota
 	EstadoFinalLogico
 	EstadoErrorLogico
+	EstadoNoAceptadoLogico
 )
 
 type AutomataLogico struct {
@@ -20,8 +25,10 @@ func (a *AutomataLogico) procesarLogico(simbolo rune) {
 			a.estadoActual = EstadoFinalLogico
 		} else if simbolo == '|' {
 			a.estadoActual = EstadoFinalLogico
+		} else if simbolo == '¬' {
+			a.estadoActual = EstadoFinalLogico
 		} else {
-			a.estadoActual = EstadoErrorLogico
+			a.estadoActual = EstadoNoAceptadoLogico
 		}
 	case EstadoFinalLogico:
 		a.estadoActual = EstadoErrorLogico
@@ -34,18 +41,25 @@ func EvaluarLogico(cadena string) (bool, int) {
 	for i, simbolo := range cadena {
 		automata.procesarLogico(simbolo)
 
+		if automata.estadoActual == EstadoNoAceptadoLogico {
+			break
+		}
+
 		if automata.estadoActual == EstadoFinalLogico {
 			iterator = i + 1
 			break
 		} else if automata.estadoActual == EstadoErrorLogico {
+			iterator = iterator + 1
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalLogico {
+		contenido := cadena[:iterator] + " -> logico"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un operador logico", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+	return false, len(cadena)
+
 }

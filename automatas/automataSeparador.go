@@ -1,6 +1,9 @@
 package automatas
 
-import "fmt"
+import (
+	"fmt"
+	"proyecto_tlf/utilities"
+)
 
 type EstadoSeparador int
 
@@ -32,20 +35,22 @@ func EvaluarSeparador(cadena string) (bool, int) {
 	var iterator int
 	for i, simbolo := range cadena {
 		automata.procesarSeparador(simbolo)
+		if automata.estadoActual == EstadoNoAceptadoSeparador {
+			break
+		}
 
 		if automata.estadoActual == EstadoFinalSeparador {
 			iterator = i + 1
-			break
-		} else if automata.estadoActual == EstadoNoAceptadoSeparador {
 			break
 		}
 	}
 
 	if automata.estadoActual == EstadoFinalSeparador {
+		contenido := cadena[:iterator] + " -> separador"
+		utilities.GuardarEnArchivo(contenido, "./salida.txt")
 		fmt.Println("es un separador: ", cadena[:iterator])
 		return true, iterator
-	} else {
-		return false, len(cadena)
 	}
+	return false, len(cadena)
 
 }
