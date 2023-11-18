@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /#aaa# -> erros sintactico comentario
 $a -> error sintactico identificador
 $$aaaaaaaaaaa -> error sintactico identificador
@@ -15,3 +16,26 @@ h -> error sintactivo hexadecimal
 h -> error sintactivo hexadecimal
 h -> error sintactivo hexadecimal
 h -> error sintactivo hexadecimal
+=======
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+?nombre? -> cadena
+>>>>>>> 93bc4c33e730313e5254c05a77f71a76d69396fd
